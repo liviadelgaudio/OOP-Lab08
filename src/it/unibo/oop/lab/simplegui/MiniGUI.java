@@ -15,7 +15,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
 /**
@@ -43,7 +42,7 @@ public class MiniGUI {
         final JButton write = new JButton("Print a random number on standard output");
         panel.add(write);
         canvas.add(panel, BorderLayout.CENTER);
-        final JTextArea text = new JTextArea();
+        final JTextField text = new JTextField();
         canvas.add(text, BorderLayout.NORTH);
         frame.setContentPane(canvas);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -53,7 +52,9 @@ public class MiniGUI {
         write.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                System.out.println(rng.nextInt());
+                final int t = rng.nextInt();
+                System.out.println(t);
+                text.setText(" " + t);
             }
         });
     }
