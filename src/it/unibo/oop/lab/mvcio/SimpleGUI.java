@@ -1,9 +1,17 @@
 package it.unibo.oop.lab.mvcio;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
 
 /**
  * A very simple program using a graphical interface.
@@ -37,6 +45,30 @@ public final class SimpleGUI {
      * builds a new {@link SimpleGUI}.
      */
     public SimpleGUI() {
+        final JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        final JTextArea text = new JTextArea();
+        panel.add(text, BorderLayout.CENTER);
+        final JButton save = new JButton("Save");
+        panel.add(save, BorderLayout.SOUTH);
+        frame.setTitle("My first java graphical interface");
+        frame.setContentPane(panel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        /*
+         * Handlers
+         */
+        save.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                try {
+                    final Controller ctrl = new Controller();
+                    ctrl.saveString(text.getText());
+                } catch (IOException exc) {
+                    JOptionPane.showMessageDialog(frame, exc, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
         /*
          * Make the frame half the resolution of the screen. This very method is
          * enough for a single screen setup. In case of multiple monitors, the
@@ -57,6 +89,11 @@ public final class SimpleGUI {
          * on screen. Results may vary, but it is generally the best choice.
          */
         frame.setLocationByPlatform(true);
+        frame.setVisible(true);
     }
+
+    public static void main(final String... args) {
+        new SimpleGUI();
+     }
 
 }
