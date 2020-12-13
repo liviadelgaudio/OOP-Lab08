@@ -32,4 +32,7 @@ public final class SimpleGUIWithFileChooser {
      * try to keep things separated.
      */
 
+    /*
+     * Point 4) may surely be improved
+     */
 }

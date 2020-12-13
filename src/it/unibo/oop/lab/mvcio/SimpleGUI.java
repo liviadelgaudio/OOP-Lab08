@@ -8,10 +8,12 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 
 /**
  * A very simple program using a graphical interface.
@@ -45,12 +47,26 @@ public final class SimpleGUI {
      * builds a new {@link SimpleGUI}.
      */
     public SimpleGUI() {
+        final Controller ctrl = new Controller();
         final JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         final JTextArea text = new JTextArea();
         panel.add(text, BorderLayout.CENTER);
         final JButton save = new JButton("Save");
         panel.add(save, BorderLayout.SOUTH);
+        /* 
+         * Ex mvcio2
+         */
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new BorderLayout());
+        panel.add(panel2, BorderLayout.NORTH);
+        final JTextField file = new JTextField("Current file: " + ctrl.getCurrentPath());
+        file.setEditable(false);
+        panel2.add(file, BorderLayout.CENTER);
+        final JButton browse = new JButton("Browse...");
+        panel2.add(browse, BorderLayout.LINE_END);
+        final JTextField task = new JTextField("Write here your text to replace current one");
+        panel2.add(task, BorderLayout.SOUTH);
         frame.setTitle("My first java graphical interface");
         frame.setContentPane(panel);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -62,10 +78,33 @@ public final class SimpleGUI {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 try {
-                    final Controller ctrl = new Controller();
+                    //final Controller ctrl = new Controller();
                     ctrl.saveString(text.getText());
                 } catch (IOException exc) {
                     JOptionPane.showMessageDialog(frame, exc, "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        });
+        /*
+         * Ex mvcio2
+         */
+        browse.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                final JFileChooser chooser = new JFileChooser();
+                //final Controller ctrl = new Controller();
+                final int result = chooser.showSaveDialog(panel2);
+                if (result == JFileChooser.APPROVE_OPTION) {
+                    ctrl.setCurrent(chooser.getSelectedFile().getName(), chooser.getSelectedFile().getPath());
+                    System.out.println(ctrl.getCurrent() + " " + ctrl.getCurrentPath());
+                    file.setText("Current file: " + ctrl.getCurrentPath());
+                } else {
+                    if (result == JFileChooser.CANCEL_OPTION) {
+                        System.out.println(ctrl.getCurrent() + " " + ctrl.getCurrentPath());
+                    } else {
+                    JOptionPane.showMessageDialog(browse, "An error occured, retry");
+                    }
                 }
             }
         });
