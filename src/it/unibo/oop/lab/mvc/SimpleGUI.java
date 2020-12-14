@@ -1,9 +1,18 @@
 package it.unibo.oop.lab.mvc;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+
 
 /**
  * A very simple program using a graphical interface.
@@ -38,7 +47,42 @@ public final class SimpleGUI {
      * builds a new {@link SimpleGUI}.
      */
     public SimpleGUI() {
+        final Controller ctrl = new ControllerImpl();
+        final JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        final JTextArea text = new JTextArea();
+        text.setEditable(false);
+        panel.add(text, BorderLayout.CENTER);
+        final JTextField tField = new JTextField();
+        panel.add(tField, BorderLayout.NORTH);
+        final JPanel panel2 = new JPanel(new FlowLayout());
+        panel.add(panel2, BorderLayout.SOUTH);
+        final JButton print = new JButton("Print");
+        panel2.add(print);
+        final JButton history = new JButton("Show history");
+        panel2.add(history);
+        frame.setContentPane(panel);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        history.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                text.setText("History:\n" + ctrl.getHistory());
+            }
+        });
+
+        print.addActionListener(new ActionListener() {
+
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                try {
+                    ctrl.setNextPrint(tField.getText());
+                    ctrl.printCurrent();
+                } catch (NullValuesException exc) {
+                    System.out.println(exc.toString());
+                }
+            }
+        });
         /*
          * Make the frame half the resolution of the screen. This very method is
          * enough for a single screen setup. In case of multiple monitors, the
@@ -62,4 +106,12 @@ public final class SimpleGUI {
         frame.setLocationByPlatform(true);
     }
 
+    private void display() {
+        frame.setVisible(true);
+    }
+
+    public static void main(final String... args) {
+        final SimpleGUI gui = new SimpleGUI();
+        gui.display();
+     }
 }
