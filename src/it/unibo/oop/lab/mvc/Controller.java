@@ -10,7 +10,7 @@ public interface Controller {
     void setNextPrint(String str) throws NullValuesException;
     String getNextString();
     List<String> getHistory();
-    void printCurrent() throws IllegalStateException;
+    void printCurrent();
     /*
      * This interface must model a simple controller responsible of I/O access. It
      * considers only the standard output, and it is able to print on it.

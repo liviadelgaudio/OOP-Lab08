@@ -53,7 +53,7 @@ public final class SimpleGUI {
         final JTextArea text = new JTextArea();
         text.setEditable(false);
         panel.add(text, BorderLayout.CENTER);
-        final JTextField tField = new JTextField();
+        final JTextField tField = new JTextField(null);
         panel.add(tField, BorderLayout.NORTH);
         final JPanel panel2 = new JPanel(new FlowLayout());
         panel.add(panel2, BorderLayout.SOUTH);
@@ -78,8 +78,11 @@ public final class SimpleGUI {
                 try {
                     ctrl.setNextPrint(tField.getText());
                     ctrl.printCurrent();
+                    tField.setText(null);
                 } catch (NullValuesException exc) {
                     System.out.println(exc.toString());
+                } catch (IllegalStateException exc2) {
+                    System.out.println(exc2.toString());
                 }
             }
         });
